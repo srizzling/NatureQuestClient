@@ -41,10 +41,16 @@ public class MainMenuActivity extends TabActivity
 		Intent profileIntent = new Intent(this, ProfileActivity.class);
 		profileTab.setContent(profileIntent);
 		
+		TabSpec helpTab = tabHost.newTabSpec("Help");
+		helpTab.setIndicator(null, getResources().getDrawable(R.drawable.locations_button));
+		Intent helpIntent = new Intent(this, HelpActivity.class);
+		helpTab.setContent(helpIntent);
+		
 		tabHost.addTab(locationsTab);
 		tabHost.addTab(cameraTab);
 		tabHost.addTab(leaderboardTab);
 		tabHost.addTab(profileTab);
+		tabHost.addTab(helpTab);
 		
 		for (int i = 0; i < tabHost.getTabWidget().getChildCount(); i++)
 		{
