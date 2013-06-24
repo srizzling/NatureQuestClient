@@ -16,7 +16,7 @@ public class BalloonMapMarker extends BalloonItemizedOverlay<OverlayItem>
 	
 	private MapView _mapView;
 	private OverlayItem _overlayItem;
-	
+	//sdf
 	private BalloonMapMarkerListener _listener;
 	
 	private Question question;
