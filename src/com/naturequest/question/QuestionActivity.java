@@ -2,116 +2,130 @@ package com.naturequest.question;
 
 import java.util.ArrayList;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.naturequest.CustomDialog;
+import com.naturequest.MainMenuActivity;
 import com.naturequest.R;
 import com.naturequest.R.id;
 import com.naturequest.R.layout;
 import com.naturequest.serverapi.QuestAPI;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
 
-public class QuestionActivity extends Activity {
+public class QuestionActivity extends Activity{
 
-	private TextView questionText;
-	private ArrayList<Button> answerButtons;
-	private TextView correctText;
+
+	private ArrayList<Button> answerButtons = new ArrayList<Button>();
+	private TextView question;
 	private Question qObj;
+
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState)
+	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_question);
+		setContentView(R.layout.question);
 
+		//question
+		question = (TextView) findViewById(R.id.questionTextView);
 
-		//Setting up Views
-		questionText = (TextView) findViewById(R.id.question);
-		correctText = (TextView) findViewById(R.id.correct);
+		//Add Buttons to list
+		Button button1 = (Button) findViewById(R.id.answer1Button);
+		Button button2 = (Button) findViewById(R.id.answer2Button);
+		Button button3 = (Button) findViewById(R.id.answer3Button);
+		Button button4 = (Button) findViewById(R.id.answer4Button);
+		answerButtons.add(button1);
+		answerButtons.add(button2);
+		answerButtons.add(button3);
+		answerButtons.add(button4);
 
-		//List of Buttons for Answers
-		final Button answerOne = (Button) findViewById(R.id.answer1);
-		Button answerTwo = (Button) findViewById(R.id.answer2);
-		Button answerThree = (Button) findViewById(R.id.answer3);
-		Button answerFour = (Button) findViewById(R.id.answer4);
-		answerButtons = new ArrayList <Button>();
-		answerButtons.add(answerOne);
-		answerButtons.add(answerTwo);
-		answerButtons.add(answerThree);
-		answerButtons.add(answerFour);		
+		checkQRCode();
+		final Intent intent = new Intent(this, MainMenuActivity.class);
+		//Add onClickMethods to all buttons
+		final Context baseContext = this;
+		for(final Button b:answerButtons){
+			b.setOnClickListener(new OnClickListener() {			
+				@Override
+				public void onClick(View v) {
+					if(qObj.checkAnswer(((String) b.getText()))){
+						final CustomDialog customDialog = new CustomDialog(baseContext, "Wohoo!");
 
-		//Get the code from previous activity
-		Intent prevIntent=getIntent();
-		Bundle prevArgs=prevIntent.getExtras();
-		String ref = prevArgs.getString("ref");
+						customDialog.showTextView("Awesome Work! You got the " +
+								"question correct!");
+						customDialog.setPrimaryButton("Ok", new OnClickListener() {
 
-//		//Add onClickMethods to all buttons
-//		for(final Button b:answerButtons){
-//			b.setOnClickListener(new OnClickListener() {			
-//				@Override
-//				public void onClick(View v) {
-//					if(qObj.checkCorrect((String) b.getText())){
-//						correctText.setText("Correct!");
-//					}
-//					else{
-//						b.setEnabled(false);
-//						correctText.setText("Wrong!");
-//					}
-//				}
-//			});
-//		}
-//
-//		//Get Question Object from server
-//		getQuestion(ref);
+							@Override
+							public void onClick(View v) {
+								finish();
+								customDialog.dismiss();
+								startActivity(intent);
+							}
+						});
 
+						customDialog.show();
+					}
+					else{
+						final CustomDialog customDialog = new CustomDialog(baseContext, "Awww! :(");
+						customDialog.showTextView("Try Again! Thats not the correct answer!");
+						customDialog.setPrimaryButton("Ok", null);
+						customDialog.show();
+						b.setEnabled(false);
 
-
-
-
-
-
-
+					}
+				}
+			});
+		}
 
 	}
 
-	private void getQuestion(String ref) {
-
+	private void checkQRCode() {
 		RequestParams params = new RequestParams();
-		params.put("r", ref);
+		Intent prevIntent = getIntent();
+		Bundle b=prevIntent.getExtras();			
+		params.put("r", b.getString("ref"));
 		QuestAPI.get("find", params, new JsonHttpResponseHandler() {				
 
 			@Override
-			public void onSuccess(JSONObject question) {       	               
-//				qObj = new Question(question);
-//
-//				//Set Question
-//				questionText.setText(qObj.getQuestion());
-//
-//				//Set Answers
-//				int i=0;
-//				for(String a:qObj.getAnswers()){
-//					Button temp = answerButtons.get(i);
-//					temp.setText(a);
-//					i++;
-//				}
+			public void onSuccess(JSONObject questionJSON) {       	               
+				qObj = new Question(questionJSON);
 
+				//Set Question
+				question.setText(qObj.getQuestion());
+
+				//Set Answers
+				int i=0;
+				for(String a:qObj.getAnswers()){
+					Button temp = answerButtons.get(i);
+					temp.setText(a);
+					i++;
+				}
+
+			}
+
+			@Override
+			protected Object parseResponse(String arg0)
+					throws JSONException {
+
+				return super.parseResponse(arg0);
 			}
 
 
 
 		});
 
-
 	}
+
+
+
 }

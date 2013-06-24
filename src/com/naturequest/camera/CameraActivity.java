@@ -3,7 +3,7 @@ package com.naturequest.camera;
 
 
 import com.naturequest.CustomDialog;
-import com.naturequest.SimpleActivity;
+import com.naturequest.question.QuestionActivity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -168,7 +168,7 @@ public class CameraActivity extends Activity implements Camera.PreviewCallback, 
 			for (Symbol sym : syms) {
 				String symData = sym.getData();
 				if (!TextUtils.isEmpty(symData)) {
-					Intent dataIntent = new Intent(this, SimpleActivity.class);
+					Intent dataIntent = new Intent(this, QuestionActivity.class);
 
 					Bundle bundle = new Bundle();
 					//Do a check of the data here
