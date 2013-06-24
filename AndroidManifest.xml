@@ -27,7 +27,7 @@
             android:required="true" />
 
         <activity
-            android:name="com.naturequest.LoginActivity"
+            android:name="com.naturequest.MainMenuActivity"
             android:screenOrientation="portrait"
             android:label="@string/app_name" >
             <intent-filter>
@@ -37,7 +37,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="MainMenuActivity"
+            android:name="LoginActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity android:name="LocationsActivity"

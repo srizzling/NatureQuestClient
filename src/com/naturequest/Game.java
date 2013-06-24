@@ -32,7 +32,7 @@ public class Game
 		currentGame = game;
 	}
 	
-	public User getUser()
+	public User getCurrentUser()
 	{
 		return this.user;
 	}
@@ -42,6 +42,9 @@ public class Game
 		this.user = user;
 	}
 	
+	public void logoutCurrentUser(){
+		this.user=null;
+	}
 	public int getScore()
 	{
 		return this.score;
@@ -70,5 +73,12 @@ public class Game
 	public void setQuestions(List<Question> questions)
 	{
 		this.questions = questions;
+	}
+
+	public boolean loggedIn() {
+		if(user!=null){
+			return true;
+		}
+		return false;
 	}
 }

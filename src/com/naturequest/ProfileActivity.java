@@ -26,7 +26,7 @@ public class ProfileActivity extends Activity
 	{
 		super.onResume();
 
-		this.usernameEditText.setText(Game.getGame().getUser().getUsername());
+		this.usernameEditText.setText(Game.getGame().getCurrentUser().getUsername());
 	}
 
 	@Override
@@ -38,7 +38,7 @@ public class ProfileActivity extends Activity
 
 		if (username != null && !username.isEmpty())
 		{
-			Game.getGame().getUser().setUsername(username);
+			Game.getGame().getCurrentUser().setUsername(username);
 		}
 	}
 }

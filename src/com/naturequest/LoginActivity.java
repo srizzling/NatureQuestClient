@@ -162,7 +162,8 @@ public class LoginActivity extends Activity
 					customDialog.setPrimaryButton("Ok", null);
 					customDialog.show();
 					
-					startActivity(intent);		
+					startActivity(intent);	
+					finish();
 
 
 				} catch (JSONException e) {

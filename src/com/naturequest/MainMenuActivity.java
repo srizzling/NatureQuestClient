@@ -51,4 +51,15 @@ public class MainMenuActivity extends TabActivity
 			tabHost.getTabWidget().getChildAt(i).setPadding(0,0,0,0);
 		}
 	}
+	
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		
+		if(Game.getGame()==null){
+			Intent login = new Intent(this, LoginActivity.class);
+			startActivity(login);
+		}
+	}
 }

@@ -2,6 +2,7 @@ package com.naturequest.camera;
 
 
 
+import com.naturequest.CustomDialog;
 import com.naturequest.SimpleActivity;
 
 import android.app.Activity;
@@ -12,6 +13,8 @@ import android.hardware.Camera;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -23,149 +26,204 @@ import net.sourceforge.zbar.SymbolSet;
 
 public class CameraActivity extends Activity implements Camera.PreviewCallback, ZBarConstants{
 
-    private static final String TAG = "ZBarScannerActivity";
-    private CameraPreview mPreview;
-    private Camera mCamera;
-    private ImageScanner mScanner;
-    private Handler mAutoFocusHandler;
-    private boolean mPreviewing = true;
+	private static final String TAG = "ZBarScannerActivity";
+	private CameraPreview mPreview;
+	private Camera mCamera;
+	private ImageScanner mScanner;
+	private Handler mAutoFocusHandler;
+	private boolean mPreviewing = true;
 
-    static {
-        System.loadLibrary("iconv");
-    }
+	static {
+		System.loadLibrary("iconv");
+	}
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); 
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); 
 
-        if(!isCameraAvailable()) {
-            // Cancel request if there is no rear-facing camera.
-            cancelRequest();
-            return;
-        }
+		if(!isCameraAvailable()) {
+			// Cancel request if there is no rear-facing camera.
+			cancelRequest();
+			return;
+		}
 
-        // Hide the window title.
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		// Hide the window title.
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        mAutoFocusHandler = new Handler();
+		mAutoFocusHandler = new Handler();
 
-        // Create and configure the ImageScanner;
-        setupScanner();
+		// Create and configure the ImageScanner;
+		setupScanner();
 
-        // Create a RelativeLayout container that will hold a SurfaceView,
-        // and set it as the content of our activity.
-        mPreview = new CameraPreview(this, this, autoFocusCB);
-        setContentView(mPreview);
-    }
-    
-    
+		// Create a RelativeLayout container that will hold a SurfaceView,
+		// and set it as the content of our activity.
+		mPreview = new CameraPreview(this, this, autoFocusCB);
+		setContentView(mPreview);
+	}
 
-    public void setupScanner() {
-        mScanner = new ImageScanner();
-        mScanner.setConfig(0, Config.X_DENSITY, 3);
-        mScanner.setConfig(0, Config.Y_DENSITY, 3);
 
-        int[] symbols = getIntent().getIntArrayExtra(SCAN_MODES);
-        if (symbols != null) {
-            mScanner.setConfig(Symbol.NONE, Config.ENABLE, 0);
-            for (int symbol : symbols) {
-                mScanner.setConfig(symbol, Config.ENABLE, 1);
-            }
-        }
-    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
+	public void setupScanner() {
+		mScanner = new ImageScanner();
+		mScanner.setConfig(0, Config.X_DENSITY, 3);
+		mScanner.setConfig(0, Config.Y_DENSITY, 3);
 
-        // Open the default i.e. the first rear facing camera.
-        mCamera = Camera.open();
-        if(mCamera == null) {
-            // Cancel request if mCamera is null.
-            cancelRequest();
-            return;
-        }
+		int[] symbols = getIntent().getIntArrayExtra(SCAN_MODES);
+		if (symbols != null) {
+			mScanner.setConfig(Symbol.NONE, Config.ENABLE, 0);
+			for (int symbol : symbols) {
+				mScanner.setConfig(symbol, Config.ENABLE, 1);
+			}
+		}
+	}
 
-        mPreview.setCamera(mCamera);
-        mPreview.showSurfaceView();
+	@Override
+	protected void onResume() {
+		super.onResume();
 
-        mPreviewing = true;
-    }
+		// Open the default i.e. the first rear facing camera.
+		mCamera = Camera.open();
+		if(mCamera == null) {
+			// Cancel request if mCamera is null.
+			cancelRequest();
+			return;
+		}
 
-    @Override
-    protected void onPause() {
-        super.onPause();
+		mPreview.setCamera(mCamera);
+		mPreview.showSurfaceView();
 
-        // Because the Camera object is a shared resource, it's very
-        // important to release it when the activity is paused.
-        if (mCamera != null) {
-            mPreview.setCamera(null);
-            mCamera.cancelAutoFocus();
-            mCamera.setPreviewCallback(null);
-            mCamera.stopPreview();
-            mCamera.release();
+		mPreviewing = true;
+	}
 
-            // According to Jason Kuang on http://stackoverflow.com/questions/6519120/how-to-recover-camera-preview-from-sleep,
-            // there might be surface recreation problems when the device goes to sleep. So lets just hide it and
-            // recreate on resume
-            mPreview.hideSurfaceView();
+	@Override
+	protected void onPause() {
+		super.onPause();
 
-            mPreviewing = false;
-            mCamera = null;
-        }
-    }
+		// Because the Camera object is a shared resource, it's very
+		// important to release it when the activity is paused.
+		if (mCamera != null) {
+			mPreview.setCamera(null);
+			mCamera.cancelAutoFocus();
+			mCamera.setPreviewCallback(null);
+			mCamera.stopPreview();
+			mCamera.release();
 
-    public boolean isCameraAvailable() {
-        PackageManager pm = getPackageManager();
-        return pm.hasSystemFeature(PackageManager.FEATURE_CAMERA);
-    }
+			// According to Jason Kuang on http://stackoverflow.com/questions/6519120/how-to-recover-camera-preview-from-sleep,
+			// there might be surface recreation problems when the device goes to sleep. So lets just hide it and
+			// recreate on resume
+			mPreview.hideSurfaceView();
 
-    public void cancelRequest() {
-        Intent dataIntent = new Intent();
-        dataIntent.putExtra(ERROR_INFO, "Camera unavailable");
-        setResult(Activity.RESULT_CANCELED, dataIntent);
-        finish();
-    }
+			mPreviewing = false;
+			mCamera = null;
+		}
+	}
 
-    public void onPreviewFrame(byte[] data, Camera camera) {
-        Camera.Parameters parameters = camera.getParameters();
-        Camera.Size size = parameters.getPreviewSize();
+	public boolean isCameraAvailable() {
+		PackageManager pm = getPackageManager();
+		return pm.hasSystemFeature(PackageManager.FEATURE_CAMERA);
+	}
 
-        Image barcode = new Image(size.width, size.height, "Y800");
-        barcode.setData(data);
+	public void cancelRequest() {
+		Intent dataIntent = new Intent();
+		dataIntent.putExtra(ERROR_INFO, "Camera unavailable");
+		setResult(Activity.RESULT_CANCELED, dataIntent);
+		finish();
+	}
 
-        int result = mScanner.scanImage(barcode);
+	public void onPreviewFrame(byte[] data, Camera camera) {
+		Camera.Parameters parameters = camera.getParameters();
+		Camera.Size size = parameters.getPreviewSize();
 
-        if (result != 0) {
-            mCamera.cancelAutoFocus();
-            mCamera.setPreviewCallback(null);
-            mCamera.stopPreview();
-            mPreviewing = false;
-            SymbolSet syms = mScanner.getResults();
-            for (Symbol sym : syms) {
-                String symData = sym.getData();
-                if (!TextUtils.isEmpty(symData)) {
-                    Intent dataIntent = new Intent(this, SimpleActivity.class);
-                    startActivity(dataIntent);                   
-                    break;
-                }
-            }
-        }
-    }
-    private Runnable doAutoFocus = new Runnable() {
-        public void run() {
-            if(mCamera != null && mPreviewing) {
-                mCamera.autoFocus(autoFocusCB);
-            }
-        }
-    };
+		Image barcode = new Image(size.width, size.height, "Y800");
+		barcode.setData(data);
 
-    // Mimic continuous auto-focusing
-    Camera.AutoFocusCallback autoFocusCB = new Camera.AutoFocusCallback() {
-        public void onAutoFocus(boolean success, Camera camera) {
-            mAutoFocusHandler.postDelayed(doAutoFocus, 1000);
-        }
-    };
+		int result = mScanner.scanImage(barcode);
+
+		if (result != 0) {
+			// Because the Camera object is a shared resource, it's very
+			// important to release it when the activity is paused.
+			if (mCamera != null) {
+				mPreview.setCamera(null);
+				mCamera.cancelAutoFocus();
+				mCamera.setPreviewCallback(null);
+				mCamera.stopPreview();
+				mCamera.release();
+
+				// According to Jason Kuang on http://stackoverflow.com/questions/6519120/how-to-recover-camera-preview-from-sleep,
+				// there might be surface recreation problems when the device goes to sleep. So lets just hide it and
+				// recreate on resume
+				mPreview.hideSurfaceView();
+
+				mPreviewing = false;
+				mCamera = null;
+			}
+
+		
+
+			
+			
+			SymbolSet syms = mScanner.getResults();
+			for (Symbol sym : syms) {
+				String symData = sym.getData();
+				if (!TextUtils.isEmpty(symData)) {
+					Intent dataIntent = new Intent(this, SimpleActivity.class);
+
+					Bundle bundle = new Bundle();
+					//Do a check of the data here
+
+					if(symData.length() != 4){
+						
+						
+						final CustomDialog customDialog = new CustomDialog(this, "Error");
+						customDialog.showTextView("This is not a Nature Quest QR Code");
+						customDialog.setPrimaryButton("Ok", new OnClickListener() {
+							
+							@Override
+							public void onClick(View v) {				
+							
+								mCamera = Camera.open();
+								if(mCamera == null) {
+									// Cancel request if mCamera is null.
+									cancelRequest();
+									return;
+								}
+
+								mPreview.setCamera(mCamera);
+								mPreview.showSurfaceView();
+
+								mPreviewing = true;
+								customDialog.dismiss();
+							}
+						});
+						customDialog.show();
+						
+						
+
+					}else{
+						bundle.putString("ref", symData);
+						dataIntent.putExtras(bundle);
+						startActivity(dataIntent);     
+					}
+
+					break;
+				}
+			}
+		}
+	}
+	private Runnable doAutoFocus = new Runnable() {
+		public void run() {
+			if(mCamera != null && mPreviewing) {
+				mCamera.autoFocus(autoFocusCB);
+			}
+		}
+	};
+
+	// Mimic continuous auto-focusing
+	Camera.AutoFocusCallback autoFocusCB = new Camera.AutoFocusCallback() {
+		public void onAutoFocus(boolean success, Camera camera) {
+			mAutoFocusHandler.postDelayed(doAutoFocus, 1000);
+		}
+	};
 }
