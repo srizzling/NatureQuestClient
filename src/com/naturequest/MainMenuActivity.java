@@ -6,19 +6,37 @@ import com.naturequest.camera.CameraActivity;
 
 import android.app.TabActivity;
 import android.content.Intent;
+import android.graphics.ColorFilter;
+import android.graphics.LightingColorFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 
 public class MainMenuActivity extends TabActivity
 {
+	private Button signOutButton;
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_menu);
 
+		this.signOutButton = (Button)findViewById(R.id.signOutButton);
+		
+		this.signOutButton.setOnClickListener(new OnClickListener()
+		{	
+			@Override
+			public void onClick(View arg0)
+			{
+				Intent intent = new Intent (MainMenuActivity.this,LoginActivity.class);
+				startActivity(intent);
+			}
+		});
+		
 		TabHost tabHost = getTabHost();
 
 		TabSpec locationsTab = tabHost.newTabSpec("Locations");
@@ -27,22 +45,22 @@ public class MainMenuActivity extends TabActivity
 		locationsTab.setContent(locationsIntent);
 
 		TabSpec cameraTab = tabHost.newTabSpec("Camera");
-		cameraTab.setIndicator(null, getResources().getDrawable(R.drawable.locations_button));
+		cameraTab.setIndicator(null, getResources().getDrawable(R.drawable.camera_button));
 		Intent cameraIntent = new Intent(this, CameraActivity.class);
 		cameraTab.setContent(cameraIntent);
 
 		TabSpec leaderboardTab = tabHost.newTabSpec("Leaderboard");
-		leaderboardTab.setIndicator(null, getResources().getDrawable(R.drawable.locations_button));
+		leaderboardTab.setIndicator(null, getResources().getDrawable(R.drawable.leaderboard_button));
 		Intent leaderboardIntent = new Intent(this, LeaderboardActivity.class);
 		leaderboardTab.setContent(leaderboardIntent);
 
 		TabSpec profileTab = tabHost.newTabSpec("Profile");
-		profileTab.setIndicator(null, getResources().getDrawable(R.drawable.locations_button));
+		profileTab.setIndicator(null, getResources().getDrawable(R.drawable.profile_button));
 		Intent profileIntent = new Intent(this, ProfileActivity.class);
 		profileTab.setContent(profileIntent);
 		
 		TabSpec helpTab = tabHost.newTabSpec("Help");
-		helpTab.setIndicator(null, getResources().getDrawable(R.drawable.locations_button));
+		helpTab.setIndicator(null, getResources().getDrawable(R.drawable.help_button));
 		Intent helpIntent = new Intent(this, HelpActivity.class);
 		helpTab.setContent(helpIntent);
 		
@@ -55,6 +73,8 @@ public class MainMenuActivity extends TabActivity
 		for (int i = 0; i < tabHost.getTabWidget().getChildCount(); i++)
 		{
 			tabHost.getTabWidget().getChildAt(i).setPadding(0,0,0,0);
+			tabHost.getTabWidget().getChildAt(i).getBackground()
+			.setColorFilter(new LightingColorFilter(0xACD473, 0x82a354));
 		}
 	}
 	
