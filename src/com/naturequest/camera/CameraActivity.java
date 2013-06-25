@@ -2,8 +2,15 @@ package com.naturequest.camera;
 
 
 
+import org.json.JSONException;
+
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 import com.naturequest.CustomDialog;
+import com.naturequest.R;
 import com.naturequest.question.QuestionActivity;
+import com.naturequest.radar.GPSTracker;
+import com.naturequest.serverapi.QuestAPI;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -13,11 +20,17 @@ import android.hardware.Camera;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.CompoundButton;
+import android.widget.FrameLayout;
+import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 import net.sourceforge.zbar.Config;
 import net.sourceforge.zbar.Image;
 import net.sourceforge.zbar.ImageScanner;
@@ -32,6 +45,7 @@ public class CameraActivity extends Activity implements Camera.PreviewCallback, 
 	private ImageScanner mScanner;
 	private Handler mAutoFocusHandler;
 	private boolean mPreviewing = true;
+	private boolean geotag=false;
 
 	static {
 		System.loadLibrary("iconv");
@@ -60,7 +74,34 @@ public class CameraActivity extends Activity implements Camera.PreviewCallback, 
 		// Create a RelativeLayout container that will hold a SurfaceView,
 		// and set it as the content of our activity.
 		mPreview = new CameraPreview(this, this, autoFocusCB);
-		setContentView(mPreview);
+		setContentView(R.layout.camera);
+		FrameLayout cameraLayout = (FrameLayout) findViewById(R.id.cameraPreview);
+		cameraLayout.addView(mPreview);
+
+
+		//Geotag
+		final ToggleButton geotagButton = (ToggleButton) findViewById(R.id.toggleButton1);
+		geotagButton.setText("Geotag");
+
+		final TextView geoLabel = (TextView) findViewById(R.id.geoLabel);
+		geoLabel.setText("Geotag can be only done by owners of the QRCode");
+
+		geotagButton.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				if(isChecked){
+					geotagButton.setText("Geotag");
+					geotag=true;
+				}
+				else{
+					geotagButton.setText("Geotag");
+					geotag=false;
+				}
+
+			}
+		});
+
 	}
 
 
@@ -160,29 +201,30 @@ public class CameraActivity extends Activity implements Camera.PreviewCallback, 
 				mCamera = null;
 			}
 
-		
 
-			
-			
+
+
+
 			SymbolSet syms = mScanner.getResults();
 			for (Symbol sym : syms) {
 				String symData = sym.getData();
 				if (!TextUtils.isEmpty(symData)) {
 					Intent dataIntent = new Intent(this, QuestionActivity.class);
 
+
 					Bundle bundle = new Bundle();
 					//Do a check of the data here
 
 					if(symData.length() != 4){
-						
-						
+
+
 						final CustomDialog customDialog = new CustomDialog(this, "Error");
 						customDialog.showTextView("This is not a Nature Quest QR Code");
 						customDialog.setPrimaryButton("Ok", new OnClickListener() {
-							
+
 							@Override
 							public void onClick(View v) {				
-							
+
 								mCamera = Camera.open();
 								if(mCamera == null) {
 									// Cancel request if mCamera is null.
@@ -198,13 +240,35 @@ public class CameraActivity extends Activity implements Camera.PreviewCallback, 
 							}
 						});
 						customDialog.show();
-						
-						
+
+
 
 					}else{
 						bundle.putString("ref", symData);
-						dataIntent.putExtras(bundle);
-						startActivity(dataIntent);     
+						if(geotag==false){
+							dataIntent.putExtras(bundle);
+							startActivity(dataIntent);
+						}
+						else{
+							GPSTracker gps = new GPSTracker(this);
+							if(gps.canGetLocation()){ 
+								RequestParams params = new RequestParams();
+								double lat=gps.getLatitude(); // returns latitude
+								double lg = gps.getLongitude(); // returns longitude
+								params.put("r",symData);
+								params.put("long",""+lg);
+								params.put("lat", ""+lat);
+								
+								QuestAPI.post("geotag.json", params, new JsonHttpResponseHandler(){
+									
+						
+									
+									
+									
+									
+								});
+							}
+						}
 					}
 
 					break;
