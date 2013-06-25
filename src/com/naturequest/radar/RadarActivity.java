@@ -57,7 +57,10 @@ public class RadarActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);   
+        
+        
+        //If Radar do this
         setContentView(R.layout.radar);
         mRadar = (RadarView) findViewById(R.id.radar);
         mSensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
@@ -75,12 +78,22 @@ public class RadarActivity extends Activity {
         mRadar.setTarget(latE6, lonE6);
         mRadar.setDistanceView((TextView) findViewById(R.id.distance));
         setUseMetric(true);
+        
+        
+        
+      //If Not Radar do this
     }
     
     @Override
     protected void onResume()
     {
         super.onResume();
+        
+        
+        
+        
+        
+      //If Radar do this
         mSensorManager.registerListener(mRadar, SensorManager.SENSOR_ORIENTATION,
                 SensorManager.SENSOR_DELAY_GAME);
  
@@ -97,6 +110,11 @@ public class RadarActivity extends Activity {
     @Override
     protected void onPause()
     {
+    	
+    	
+    	
+    	
+    	//If Radar do this
         mSensorManager.unregisterListener(mRadar);
         mLocationManager.removeUpdates(mRadar);
         
