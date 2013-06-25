@@ -2,35 +2,36 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity$DummySectionFragment" >
 
     <FrameLayout
         android:id="@+id/cameraPreview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
         android:layout_weight="1" >
+
+        
+
     </FrameLayout>
 
-    <TextView
-        android:id="@+id/scanText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/cameraPreview"
-        android:layout_alignLeft="@+id/cameraPreview"
-        android:layout_marginLeft="35dp"
-        android:text="Scanning..." />
-
-    <Button
-        android:id="@+id/scan"
-        style="?android:attr/buttonStyleSmall"
+    <ToggleButton
+        android:id="@+id/toggleButton1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:text="Button" />
+        android:layout_centerHorizontal="true"
+        android:text="Geotag" />
+
+    <TextView
+        android:id="@+id/geoLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/toggleButton1"
+        android:layout_centerHorizontal="true"
+        android:text="Geotag?"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </RelativeLayout>
