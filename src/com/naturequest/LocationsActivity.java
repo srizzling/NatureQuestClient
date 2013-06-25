@@ -12,6 +12,7 @@ import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
 import com.naturequest.R;
+import com.naturequest.radar.RadarActivity;
 
 public class LocationsActivity extends Activity
 {
@@ -24,10 +25,21 @@ public class LocationsActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.locations);
 
-		this.latTextView = (TextView)findViewById(R.id.latTextView);
-		this.lonTextView = (TextView)findViewById(R.id.LngTextView);		
+			
 		
 		
+	}
+	
+	@Override
+	protected void onResume() {		
+		super.onResume();
+		Intent intent = new Intent(this, RadarActivity.class);
+
+		
+		
+		intent.putExtra("latitude", (float)-41.209066);
+        intent.putExtra("longitude", (float)174.800470);
+        startActivity(intent);
 	}
 
 	
