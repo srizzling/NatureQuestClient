@@ -11,8 +11,10 @@ public class Game
 	private Question question;
 	
 	private List<Question> questions = new ArrayList<Question>();
+	private List<String> quests = new ArrayList<String>();
 	
 	private User user;
+	private String currentQuest;
 	
 	private static Game currentGame;
 	
@@ -80,5 +82,25 @@ public class Game
 			return true;
 		}
 		return false;
+	}
+	
+	public List<String> getQuests()
+	{
+		return this.quests;
+	}
+	
+	public void setQuests(List<String> quests)
+	{
+		this.quests = quests;
+	}
+
+	public String getCurrentQuest()
+	{
+		return this.currentQuest;
+	}
+	
+	public void setCurrentQuest(String currentQuest)
+	{
+		this.currentQuest = currentQuest;
 	}
 }

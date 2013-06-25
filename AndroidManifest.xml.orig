@@ -19,7 +19,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/icon"
         android:label="@string/app_name"
         android:theme="@android:style/Theme.NoTitleBar" >
         <uses-library
@@ -57,6 +57,15 @@
         
           <activity android:name="SimpleActivity"></activity>
           <activity android:name=".camera.CameraActivity"></activity>
+<<<<<<< HEAD
+          <activity android:name=".radar.RadarActivity"></activity>
+          
+          
+          
+=======
+          <activity android:name="HelpActivity"></activity>
+          <activity android:name="QuestConfirmActivity"></activity>
+>>>>>>> 3e23ff7d9241b3c6e618cc993075114326aa6519
     </application>
 
 </manifest>
