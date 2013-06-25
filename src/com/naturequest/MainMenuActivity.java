@@ -3,6 +3,7 @@ package com.naturequest;
 
 import com.naturequest.R;
 import com.naturequest.camera.CameraActivity;
+import com.naturequest.radar.RadarActivity;
 
 import android.app.TabActivity;
 import android.content.Intent;
@@ -41,7 +42,7 @@ public class MainMenuActivity extends TabActivity
 
 		TabSpec locationsTab = tabHost.newTabSpec("Locations");
 		locationsTab.setIndicator(null, getResources().getDrawable(R.drawable.locations_button));
-		Intent locationsIntent = new Intent(this, LocationsActivity.class);
+		Intent locationsIntent = new Intent(this, RadarActivity.class);
 		locationsTab.setContent(locationsIntent);
 
 		TabSpec cameraTab = tabHost.newTabSpec("Camera");
