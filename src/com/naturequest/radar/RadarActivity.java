@@ -73,8 +73,9 @@ public class RadarActivity extends Activity {
         
         // Read the target from our intent
         Intent i = getIntent();
-        int latE6 = (int)(i.getFloatExtra("latitude", 0) * GeoUtils.MILLION);
-        int lonE6 = (int)(i.getFloatExtra("longitude", 0) * GeoUtils.MILLION);
+        
+        int latE6 = (int)( -41.29607076* GeoUtils.MILLION);
+        int lonE6 = (int)( 174.77518579* GeoUtils.MILLION);
         mRadar.setTarget(latE6, lonE6);
         mRadar.setDistanceView((TextView) findViewById(R.id.distance));
         setUseMetric(true);
