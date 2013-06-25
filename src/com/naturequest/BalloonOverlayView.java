@@ -38,6 +38,7 @@ public class BalloonOverlayView<Item extends OverlayItem> extends FrameLayout {
 	private LinearLayout layout;
 	private TextView title;
 	private TextView snippet;
+	//jdsd
 
 	/**
 	 * Create a new BalloonOverlayView.
