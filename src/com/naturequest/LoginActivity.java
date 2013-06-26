@@ -153,6 +153,7 @@ public class LoginActivity extends Activity
 				String message;
 				try {					
 					token = user.getString("token");
+					Log.d("token",token);
 					newUser.setToken(token);				
 					Game game = new Game(newUser);
 					Game.setGame(game);					
