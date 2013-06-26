@@ -35,8 +35,9 @@ public class MainMenuActivity extends TabActivity
 			{
 				Intent intent = new Intent (MainMenuActivity.this,LoginActivity.class);
 				startActivity(intent);
-				Game.setGame(null);
 				finish();
+				Game.setGame(null);
+				
 			}
 		});
 		
