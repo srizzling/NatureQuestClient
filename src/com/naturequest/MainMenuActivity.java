@@ -1,6 +1,8 @@
 package com.naturequest;
 
 
+
+
 import com.naturequest.R;
 import com.naturequest.camera.CameraActivity;
 import com.naturequest.radar.RadarActivity;
@@ -11,14 +13,19 @@ import android.graphics.ColorFilter;
 import android.graphics.LightingColorFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 
 public class MainMenuActivity extends TabActivity
 {
+	LinearLayout mmbgImage;
+	
 	private Button signOutButton;
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -26,26 +33,36 @@ public class MainMenuActivity extends TabActivity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_menu);
 
+		mmbgImage = (LinearLayout) findViewById(R.id.bgTheme);
+		
 		this.signOutButton = (Button)findViewById(R.id.signOutButton);
 		
 		this.signOutButton.setOnClickListener(new OnClickListener()
+		
+		
+		
 		{	
 			@Override
 			public void onClick(View arg0)
 			{
 				Intent intent = new Intent (MainMenuActivity.this,LoginActivity.class);
 				startActivity(intent);
-				finish();
 				Game.setGame(null);
-				
+				finish();
 			}
+			
+			
 		});
+		
+		
+		
 		
 		TabHost tabHost = getTabHost();
 
 		TabSpec locationsTab = tabHost.newTabSpec("Locations");
 		locationsTab.setIndicator(null, getResources().getDrawable(R.drawable.locations_button));
-		Intent locationsIntent = new Intent(this, RadarActivity.class);
+		Intent locationsIntent = new Intent(this, CompassActivity.class);
+		 
 		locationsTab.setContent(locationsIntent);
 
 		TabSpec cameraTab = tabHost.newTabSpec("Camera");
@@ -68,8 +85,9 @@ public class MainMenuActivity extends TabActivity
 		Intent helpIntent = new Intent(this, HelpActivity.class);
 		helpTab.setContent(helpIntent);
 		
-		tabHost.addTab(locationsTab);
+		
 		tabHost.addTab(cameraTab);
+		tabHost.addTab(locationsTab);
 		tabHost.addTab(leaderboardTab);
 		tabHost.addTab(profileTab);
 		tabHost.addTab(helpTab);
@@ -89,7 +107,26 @@ public class MainMenuActivity extends TabActivity
 		
 		if(Game.getGame()==null){
 			Intent login = new Intent(this, LoginActivity.class);
+			finish();
 			startActivity(login);
+			
+		}else if(Game.getGame().getCurrentQuest()==null){
+			Intent login = new Intent(this, QuestConfirmActivity.class);
+			finish();
+			startActivity(login);
+			
 		}
+                else 
+                {
+                   Game.getGame().setMainMenuActivity(this);
+   				
+                }
+	}
+	public void setBackgroundTheme(int theme)
+	{
+	Log.d("Main menu set theme", "tick");
+	  this.mmbgImage = (LinearLayout) findViewById(R.id.bgTheme);
+
+	  this.mmbgImage.setBackgroundResource(theme);
 	}
 }

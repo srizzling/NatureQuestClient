@@ -99,6 +99,30 @@
                     android:layout_weight="1" />
             </LinearLayout>
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/longt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/questionTextView"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="115dp"
+            android:text="long"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+        
+        
+        <TextView
+            android:id="@+id/lat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/questionTextView"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="115dp"
+            android:text="lat"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+        
+        
+
     </RelativeLayout>
 
 </LinearLayout>

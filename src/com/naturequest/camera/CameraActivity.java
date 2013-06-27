@@ -2,7 +2,9 @@ package com.naturequest.camera;
 
 
 
+import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -13,6 +15,7 @@ import com.naturequest.radar.GPSTracker;
 import com.naturequest.serverapi.QuestAPI;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
@@ -46,6 +49,9 @@ public class CameraActivity extends Activity implements Camera.PreviewCallback, 
 	private Handler mAutoFocusHandler;
 	private boolean mPreviewing = true;
 	private boolean geotag=false;
+	private Context activityContext;
+	private boolean success;
+	private String message;
 
 	static {
 		System.loadLibrary("iconv");
@@ -55,7 +61,7 @@ public class CameraActivity extends Activity implements Camera.PreviewCallback, 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); 
-
+		
 		if(!isCameraAvailable()) {
 			// Cancel request if there is no rear-facing camera.
 			cancelRequest();
@@ -174,6 +180,7 @@ public class CameraActivity extends Activity implements Camera.PreviewCallback, 
 	}
 
 	public void onPreviewFrame(byte[] data, Camera camera) {
+		activityContext=this;
 		Camera.Parameters parameters = camera.getParameters();
 		Camera.Size size = parameters.getPreviewSize();
 
@@ -261,14 +268,51 @@ public class CameraActivity extends Activity implements Camera.PreviewCallback, 
 								
 								QuestAPI.post("geotag.json", params, new JsonHttpResponseHandler(){
 									
+									
+									@Override
+									public void onSuccess(JSONObject response){
+										message = "";
+										try {
+											message = response.getString("message");
+											success=response.getBoolean("success");
+										} catch (JSONException e) {
+											// TODO Auto-generated catch block
+											e.printStackTrace();
+										}
+										
+									}
+									@Override
+									protected Object parseResponse(String arg0)
+											throws JSONException {
+										Log.d("message",arg0);
+										message = "";
+										try{
+											JSONObject response = new JSONObject(arg0);
+											message=response.getString("message");
+											success=response.getBoolean("success");
+											
+										}
+										catch(JSONException e){
+											
+											
+										}
+										return super.parseResponse(arg0);
+									}
 						
 									
 									
 									
 									
 								});
+								
+								
 							}
 						}
+					}
+					if(success){
+						Toast.makeText(this, "Sucessful! "+message, Toast.LENGTH_LONG).show();
+					}else{
+						Toast.makeText(this, "Error! "+message, Toast.LENGTH_LONG).show();
 					}
 
 					break;

@@ -2,12 +2,14 @@ package com.naturequest.question;
 
 import java.util.ArrayList;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.naturequest.CustomDialog;
+import com.naturequest.Game;
 import com.naturequest.MainMenuActivity;
 import com.naturequest.R;
 import com.naturequest.R.id;
@@ -69,8 +71,12 @@ public class QuestionActivity extends Activity{
 							public void onClick(View v) {
 								finish();
 								customDialog.dismiss();
+								updateScore();
 								startActivity(intent);
+								finish();
 							}
+
+						
 						});
 
 						customDialog.show();
@@ -87,6 +93,28 @@ public class QuestionActivity extends Activity{
 			});
 		}
 
+	}
+	
+	private void updateScore() {
+		
+		RequestParams params = new RequestParams();
+		QuestAPI.get("updatescore", params, new JsonHttpResponseHandler(){
+			public void onSuccess(JSONArray arg0) {
+				
+				Leaderboard leader = new Leaderboard(arg0);
+				Game.getGame().setLeaderboard(leader.getLeaderboard());
+				
+				
+				
+			};
+			
+			@Override
+			protected Object parseResponse(String arg0) throws JSONException {
+				Log.d("Response",arg0);
+				return super.parseResponse(arg0);
+			}
+		});
+		
 	}
 
 	private void checkQRCode() {

@@ -3,7 +3,13 @@ package com.naturequest;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.google.android.maps.GeoPoint;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+import com.naturequest.serverapi.QuestAPI;
 
 import android.content.Context;
 import android.location.Location;
@@ -24,46 +30,21 @@ public class User
 
 	private List<UserNotificationListener> userNotificationListeners = new ArrayList<UserNotificationListener>();
 	private String token;
+	private String picture;
 
-	public User(String username, Context context, String authToken)
-	{
-		this.username = username;
-
-		this.context = context;
+	
+	public User(){
 		
-		this.token = authToken;
-
-		this.locationListener = new LocationListener()
-		{
-			@Override
-			public void onStatusChanged(String provider, int status, Bundle extras)
-			{
-			}
-
-			@Override
-			public void onProviderEnabled(String provider)
-			{
-			}
-
-			@Override
-			public void onProviderDisabled(String provider)
-			{
-			}
-
-			@Override
-			public void onLocationChanged(Location location)
-			{
-				if (location != null)
-				{
-					if (User.this.location == null ||
-							location.getTime() > User.this.location.getTime())
-					{
-						setLocation(location);
-					}
-				}			
-			}
-		};
 	}
+	
+	public User(String username, String authToken)
+	{
+		this.username = username;		
+		this.token = authToken;
+	}
+	
+	
+	
 
 	public String getUsername()
 	{
@@ -168,5 +149,16 @@ public class User
 	public void setToken(String token) {
 		this.token = token;
 		
+	}
+
+	public void setPicture(String picture) {
+		RequestParams params = new RequestParams();
+		params.put("picture",picture);		
+
+		this.picture = picture;
+	}
+	
+	public String getPicture(){
+		return this.picture;
 	}
 }
