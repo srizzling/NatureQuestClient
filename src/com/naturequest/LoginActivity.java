@@ -11,6 +11,7 @@ import com.google.android.maps.GeoPoint;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.naturequest.R;
+import com.naturequest.question.Leaderboard;
 import com.naturequest.question.Question;
 import com.naturequest.serverapi.QuestAPI;
 
@@ -156,11 +157,13 @@ public class LoginActivity extends Activity
 					String picture = user.getString("picture");
 					Log.d("picture", picture);
 					Log.d("token",token);
+					JSONArray json = user.getJSONArray("leaderboard");
 					newUser.setToken(token);
 					newUser.setPicture(picture);
 					Game game = new Game(newUser);
-					Game.setGame(game);					
-				
+					Game.setGame(game);
+					Leaderboard leader = new Leaderboard(json);					
+					Game.getGame().setLeaderboard(leader.getLeaderboard());		
 					
 					
 					JSONArray questJSON = user.getJSONArray("quests");

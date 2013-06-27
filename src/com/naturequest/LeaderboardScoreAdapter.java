@@ -10,17 +10,17 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-public class LeaderboardScoreAdapter extends ArrayAdapter<LeaderboardScore>
+public class LeaderboardScoreAdapter extends ArrayAdapter<User>
 {
-	public LeaderboardScoreAdapter(Context context, List<LeaderboardScore> items)
+	public LeaderboardScoreAdapter(Context context, List<User> items)
 	{
-		super(context, R.layout.leaderboard_list_item, new ArrayList<LeaderboardScore>(items));
+		super(context, R.layout.leaderboard_list_item, new ArrayList<User>(items));
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) 
 	{
-		LeaderboardScore leaderboardScoreItem = getItem(position);
+		User leaderboardScoreItem = getItem(position);
 		
 		if (convertView == null)
 		{
@@ -39,7 +39,7 @@ public class LeaderboardScoreAdapter extends ArrayAdapter<LeaderboardScore>
 		//nameTextView.setTypeface(tf);
 		
 		rankTextView.setText(String.valueOf(position + 1));
-		nameTextView.setText(leaderboardScoreItem.getName() + " - " + String.valueOf(leaderboardScoreItem.getScore()));
+		nameTextView.setText(leaderboardScoreItem.getUsername() + " - " + String.valueOf(leaderboardScoreItem.getScore()));
 		
 		return convertView;
 	}
