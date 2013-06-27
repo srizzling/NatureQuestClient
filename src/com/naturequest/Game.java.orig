@@ -4,12 +4,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
+<<<<<<< HEAD
 import org.json.JSONException;
 import org.json.JSONObject;
-import android.util.Log;
-import android.content.Context;
-import com.naturequest.question.Question;
 
+import android.content.Context;
+=======
+import android.util.Log;
+>>>>>>> 848787e2b726e535833b0169c9499f2fa057aeb4
 
 import com.naturequest.question.Question;
 import com.naturequest.radar.GPSTracker;
@@ -20,7 +23,7 @@ public class Game
 	
 	private int score;
 	private Question question;
-	
+
 	private List<Question> questions = new ArrayList<Question>();
 	private List<JSONObject> quests = new ArrayList<JSONObject>();
 
@@ -29,6 +32,9 @@ public class Game
 	private ArrayList<User> leaders;
 
 	private static Game currentGame;
+<<<<<<< HEAD
+
+=======
 	
 	public MainMenuActivity getMainMenuActivity()
 	{
@@ -46,6 +52,7 @@ public class Game
 	this.mainMenuActivity.setBackgroundTheme(theme);
 	}
 	
+>>>>>>> 848787e2b726e535833b0169c9499f2fa057aeb4
 	public Game(User user)
 	{
 		this.user = user;
@@ -116,7 +123,7 @@ public class Game
 		}
 		return false;
 	}
-	
+
 	public List<String> getQuests()
 	{
 		List<String> temp = new ArrayList<String>();
@@ -150,7 +157,7 @@ public class Game
 		}
 		return null;
 	}
-	
+
 	public void setCurrentQuest(String currentQuest)
 	{
 		
@@ -178,6 +185,7 @@ public class Game
 		return 0;
 	}
 	
+<<<<<<< HEAD
 	public List<Question> getSortedQuestions(Context context){
 		List<Question> temp = new ArrayList<Question>(this.questions);
 		DistanceComparator compare = new DistanceComparator();
@@ -197,5 +205,7 @@ public class Game
 	
 
 
+=======
+>>>>>>> 848787e2b726e535833b0169c9499f2fa057aeb4
 	
 }

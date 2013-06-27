@@ -13,14 +13,19 @@ import android.graphics.ColorFilter;
 import android.graphics.LightingColorFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 
 public class MainMenuActivity extends TabActivity
 {
+	LinearLayout mmbgImage;
+	
 	private Button signOutButton;
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -28,20 +33,29 @@ public class MainMenuActivity extends TabActivity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_menu);
 
+		mmbgImage = (LinearLayout) findViewById(R.id.bgTheme);
+		
 		this.signOutButton = (Button)findViewById(R.id.signOutButton);
 		
 		this.signOutButton.setOnClickListener(new OnClickListener()
+		
+		
+		
 		{	
 			@Override
 			public void onClick(View arg0)
 			{
 				Intent intent = new Intent (MainMenuActivity.this,LoginActivity.class);
 				startActivity(intent);
-				finish();
 				Game.setGame(null);
-				
+				finish();
 			}
+			
+			
 		});
+		
+		
+		
 		
 		TabHost tabHost = getTabHost();
 
@@ -102,5 +116,17 @@ public class MainMenuActivity extends TabActivity
 			startActivity(login);
 			
 		}
+                else 
+                {
+                   Game.getGame().setMainMenuActivity(this);
+   				
+                }
+	}
+	public void setBackgroundTheme(int theme)
+	{
+	Log.d("Main menu set theme", "tick");
+	  this.mmbgImage = (LinearLayout) findViewById(R.id.bgTheme);
+
+	  this.mmbgImage.setBackgroundResource(theme);
 	}
 }
