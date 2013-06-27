@@ -16,7 +16,11 @@
 
 package com.naturequest.radar;
 
+import java.util.List;
+
+import com.naturequest.Game;
 import com.naturequest.R;
+import com.naturequest.question.Question;
 
 import android.app.Activity;
 import android.content.Context;
@@ -25,6 +29,7 @@ import android.content.SharedPreferences;
 import android.hardware.SensorManager;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
@@ -36,100 +41,140 @@ import android.widget.TextView;
  */
 public class RadarActivity extends Activity {
 
-    private static final int LOCATION_UPDATE_INTERVAL_MILLIS = 1000;
+	private static final int LOCATION_UPDATE_INTERVAL_MILLIS = 1000;
 
-    private static final int MENU_STANDARD = Menu.FIRST + 1;
+	private static final int MENU_STANDARD = Menu.FIRST + 1;
 
-    private static final int MENU_METRIC = Menu.FIRST + 2;
+	private static final int MENU_METRIC = Menu.FIRST + 2;
 
-    private static final String RADAR = "radar";
-    
-    private static final String PREF_METRIC = "metric";
+	private static final String RADAR = "radar";
 
-    private SensorManager mSensorManager;
+	private static final String PREF_METRIC = "metric";
 
-    private RadarView mRadar;
+	private SensorManager mSensorManager;
 
-    private LocationManager mLocationManager;
+	private RadarView mRadar;
 
-    private SharedPreferences mPrefs;
-    
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);   
-        
-        
-        //If Radar do this
-        setContentView(R.layout.radar);
-        mRadar = (RadarView) findViewById(R.id.radar);
-        mSensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
-        mLocationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-     
-        // Metric or standard units?
-        mPrefs = getSharedPreferences(RADAR, MODE_PRIVATE);
-        boolean useMetric = mPrefs.getBoolean(PREF_METRIC, false);
-        mRadar.setUseMetric(useMetric);
-        
-        // Read the target from our intent
-        Intent i = getIntent();
-        
-        int latE6 = (int)( -41.29607076* GeoUtils.MILLION);
-        int lonE6 = (int)( 174.77518579* GeoUtils.MILLION);
-        mRadar.setTarget(latE6, lonE6);
-        mRadar.setDistanceView((TextView) findViewById(R.id.distance));
-        setUseMetric(true);
-        
-        
-        
-      //If Not Radar do this
-    }
-    
-    @Override
-    protected void onResume()
-    {
-        super.onResume();
-        
-        
-        
-        
-        
-      //If Radar do this
-        mSensorManager.registerListener(mRadar, SensorManager.SENSOR_ORIENTATION,
-                SensorManager.SENSOR_DELAY_GAME);
- 
-        // Start animating the radar screen
-        mRadar.startSweep();
-        
-        // Register for location updates
-        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-                LOCATION_UPDATE_INTERVAL_MILLIS, 1, mRadar);
-        mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
-                LOCATION_UPDATE_INTERVAL_MILLIS, 1, mRadar);
-    }
+	private LocationManager mLocationManager;
 
-    @Override
-    protected void onPause()
-    {
-    	
-    	
-    	
-    	
-    	//If Radar do this
-        mSensorManager.unregisterListener(mRadar);
-        mLocationManager.removeUpdates(mRadar);
-        
-        // Stop animating the radar screen
-        mRadar.stopSweep();
-        super.onStop();
-    }
+	private SharedPreferences mPrefs;
 
-   
+	private Bundle bundle;
 
-    private void setUseMetric(boolean useMetric) {
-        SharedPreferences.Editor e = mPrefs.edit();
-        e.putBoolean(PREF_METRIC, useMetric);
-        e.commit();
-        mRadar.setUseMetric(useMetric);
-    }
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		bundle = savedInstanceState;
+		requestWindowFeature(Window.FEATURE_NO_TITLE);   
+
+
+		//If Radar do this
+		setContentView(R.layout.radar);
+		mRadar = (RadarView) findViewById(R.id.radar);
+		mSensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
+		mLocationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+
+		// Metric or standard units?
+		mPrefs = getSharedPreferences(RADAR, MODE_PRIVATE);
+		boolean useMetric = mPrefs.getBoolean(PREF_METRIC, false);
+		mRadar.setUseMetric(useMetric);
+
+		// Read the target from our intent
+		Intent i = getIntent();
+		
+		
+
+
+
+
+
+
+
+		setUseMetric(true);
+
+
+
+		//If Not Radar do this
+	}
+	/*
+	 * Should make a server call to 
+	 */
+	private Question getClosestPoint() {
+		if(Game.getGame()!=null){
+			List<Question> question = Game.getGame().getSortedQuestions(this);
+			if(question.size()>0){
+				return question.get(0);
+			}
+			else{
+				Question newQ = new Question();
+				newQ.setLat(0);
+				newQ.setLongitude(0);
+				return newQ;
+			}
+		}
+		else{
+			Question newQ = new Question();
+			newQ.setLat(0);
+			newQ.setLongitude(0);
+			return newQ;
+		}
+
+	}
+
+	@Override
+	protected void onResume()
+	{
+		super.onResume();
+
+
+
+
+
+		//If Radar do this
+		mSensorManager.registerListener(mRadar, SensorManager.SENSOR_ORIENTATION,
+				SensorManager.SENSOR_DELAY_GAME);
+
+		// Start animating the radar screen
+		mRadar.startSweep();
+
+		// Register for location updates
+		mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+				LOCATION_UPDATE_INTERVAL_MILLIS, 1, mRadar);
+		
+
+
+		Question q=getClosestPoint();
+		TextView question = (TextView) findViewById(R.id.question);
+		question.setText(q.getQuestion());
+		int latE6 = (int)( q.getLat()* GeoUtils.MILLION);
+		int lonE6 = (int)( q.getLongitude() * GeoUtils.MILLION);
+		mRadar.setTarget(latE6, lonE6);
+		mRadar.setDistanceView((TextView) findViewById(R.id.distance));
+
+	}
+
+	@Override
+	protected void onPause()
+	{
+
+
+
+
+		//If Radar do this
+		mSensorManager.unregisterListener(mRadar);
+		mLocationManager.removeUpdates(mRadar);
+
+		// Stop animating the radar screen
+		mRadar.stopSweep();
+		super.onStop();
+	}
+
+
+
+	private void setUseMetric(boolean useMetric) {
+		SharedPreferences.Editor e = mPrefs.edit();
+		e.putBoolean(PREF_METRIC, useMetric);
+		e.commit();
+		mRadar.setUseMetric(useMetric);
+	}
 }
