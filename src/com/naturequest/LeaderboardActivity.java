@@ -60,6 +60,21 @@ public class LeaderboardActivity extends Activity
 		this.scores = new ArrayList<LeaderboardScore>(){{
 			add(new LeaderboardScore("name", 1000, 200, "Zoolander"));
 			add(new LeaderboardScore("Lit", -500, 0, "Log in"));
+			add(new LeaderboardScore("fdskj", 123,0,"dsf"));
+			add(new LeaderboardScore("fdskj", 123,0,"dsf"));
+			add(new LeaderboardScore("fdskj", 123,0,"dsf"));
+			add(new LeaderboardScore("fdskj", 123,0,"dsf"));
+			add(new LeaderboardScore("fdskj", 123,0,"dsf"));
+			add(new LeaderboardScore("fdskj", 123,0,"dsf"));
+			add(new LeaderboardScore("fdskj", 123,0,"dsf"));
+			add(new LeaderboardScore("fdskj", 123,0,"dsf"));
+			add(new LeaderboardScore("fdskj", 123,0,"dsf"));
+			add(new LeaderboardScore("fdskj", 123,0,"dsf"));
+			add(new LeaderboardScore("fdskj", 123,0,"dsf"));
+			add(new LeaderboardScore("fdskj", 123,0,"dsf"));
+			add(new LeaderboardScore("fdskj", 123,0,"dsf"));
+			add(new LeaderboardScore("fdskj", 123,0,"dsf"));
+			add(new LeaderboardScore("fdskj", 123,0,"dsf"));
 		}};
 		
 		ListView listView = (ListView)findViewById(R.id.listView);
