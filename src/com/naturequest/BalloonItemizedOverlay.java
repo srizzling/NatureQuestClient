@@ -17,7 +17,7 @@ package com.naturequest;
 
 import java.util.List;
 
-import android.R;
+
 import android.graphics.drawable.Drawable;
 import android.view.MotionEvent;
 import android.view.View;
