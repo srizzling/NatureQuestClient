@@ -138,7 +138,7 @@ public class LoginActivity extends Activity
 		String username=this.usernameEditText.getText().toString();
 		String password=this.passwordEditText.getText().toString();
 
-		final User newUser = new User(username, this, "");
+		final User newUser = new User(username, "");
 
 		RequestParams params = new RequestParams();
 		params.put("email",username);
@@ -153,8 +153,11 @@ public class LoginActivity extends Activity
 				String message;
 				try {					
 					token = user.getString("token");
+					String picture = user.getString("picture");
+					Log.d("picture", picture);
 					Log.d("token",token);
-					newUser.setToken(token);				
+					newUser.setToken(token);
+					newUser.setPicture(picture);
 					Game game = new Game(newUser);
 					Game.setGame(game);					
 				
