@@ -25,6 +25,11 @@ public class User
 	private List<UserNotificationListener> userNotificationListeners = new ArrayList<UserNotificationListener>();
 	private String token;
 
+	
+	public User(){
+		
+	}
+	
 	public User(String username, Context context, String authToken)
 	{
 		this.username = username;

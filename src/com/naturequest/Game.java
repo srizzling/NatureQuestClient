@@ -23,6 +23,7 @@ public class Game
 
 	private User user;
 	private JSONObject currentQuest;
+	private ArrayList<User> leaders;
 
 	private static Game currentGame;
 
@@ -164,6 +165,15 @@ public class Game
 		compare.setContext(context);
 		Collections.sort(this.questions,compare);
 		return temp;
+	}
+	
+	public void setLeaderboard(ArrayList<User> leaders){
+		this.leaders=leaders;
+		
+	}
+	
+	public List<User> getLeaderboard(){
+		return leaders;
 	}
 	
 
