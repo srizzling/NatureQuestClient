@@ -1,6 +1,8 @@
 package com.naturequest;
 
 
+
+
 import com.naturequest.R;
 import com.naturequest.camera.CameraActivity;
 import com.naturequest.radar.RadarActivity;
@@ -45,7 +47,8 @@ public class MainMenuActivity extends TabActivity
 
 		TabSpec locationsTab = tabHost.newTabSpec("Locations");
 		locationsTab.setIndicator(null, getResources().getDrawable(R.drawable.locations_button));
-		Intent locationsIntent = new Intent(this, RadarActivity.class);
+		Intent locationsIntent = new Intent(this, CompassActivity.class);
+		 
 		locationsTab.setContent(locationsIntent);
 
 		TabSpec cameraTab = tabHost.newTabSpec("Camera");
@@ -68,8 +71,9 @@ public class MainMenuActivity extends TabActivity
 		Intent helpIntent = new Intent(this, HelpActivity.class);
 		helpTab.setContent(helpIntent);
 		
-		tabHost.addTab(locationsTab);
+		
 		tabHost.addTab(cameraTab);
+		tabHost.addTab(locationsTab);
 		tabHost.addTab(leaderboardTab);
 		tabHost.addTab(profileTab);
 		tabHost.addTab(helpTab);
@@ -89,7 +93,14 @@ public class MainMenuActivity extends TabActivity
 		
 		if(Game.getGame()==null){
 			Intent login = new Intent(this, LoginActivity.class);
+			finish();
 			startActivity(login);
+			
+		}else if(Game.getGame().getCurrentQuest()==null){
+			Intent login = new Intent(this, QuestConfirmActivity.class);
+			finish();
+			startActivity(login);
+			
 		}
 	}
 }

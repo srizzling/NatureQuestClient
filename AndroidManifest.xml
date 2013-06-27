@@ -59,7 +59,7 @@
           <activity android:name=".camera.CameraActivity"></activity>
           <activity android:name="HelpActivity"></activity>
           <activity android:name="QuestConfirmActivity"></activity>
-          <activity android:name=".radar.RadarActivity"></activity>
+          <activity android:name="CompassActivity"></activity>
          
           
     </application>

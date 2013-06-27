@@ -158,31 +158,30 @@ public class LoginActivity extends Activity
 					Game game = new Game(newUser);
 					Game.setGame(game);					
 				
-					//TODO store list of quests from server here
-					List<String> quests = new ArrayList<String>();
 					
-					quests.add("Quest 1");
-					quests.add("Quest 2");
-					quests.add("Quest 3");
-					quests.add("Quest 4");
 					
+					JSONArray questJSON = user.getJSONArray("quests");
+					List<JSONObject> quests = new ArrayList<JSONObject>();	
+					for(int i=0; i<questJSON.length(); i++){
+						JSONObject questObj=questJSON.getJSONObject(i);						
+						quests.add(questObj);
+					}
+									
+								
 					Game.getGame().setQuests(quests);
 					
 					Intent intent = new Intent(LoginActivity.this, QuestConfirmActivity.class);
 					startActivity(intent);
+
 					
-					CustomDialog customDialog = new CustomDialog(activityContext, "Success!");
-					customDialog.showTextView("Successfully logged in!");
-					customDialog.setPrimaryButton("Ok", null);
-					customDialog.show();
-					
-					startActivity(intent);	
+						
 					finish();
 
 
 				} catch (JSONException e) {
 
 					Log.d("Status","This happens");
+					Log.d("Status",e.getMessage());
 				}
 
 

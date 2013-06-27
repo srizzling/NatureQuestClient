@@ -35,13 +35,17 @@ public class Question
 			answers.add(answer4);
 			
 			
-			//this.lat=question.getLong("lat");
-			//this.longitude = question.getLong("Long");
+			this.setLat(question.getLong("lat"));
+			this.setLongitude(question.getLong("Long"));
 			
 			
 			
 			
 		} catch (JSONException e) {	}	
+	}
+	
+	public Question(){
+		
 	}
 	
 	public ArrayList<String> getAnswers(){
@@ -61,5 +65,21 @@ public class Question
 
 	public String getQuestion() {
 		return question;
+	}
+
+	public long getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(long longitude) {
+		this.longitude = longitude;
+	}
+
+	public long getLat() {
+		return lat;
+	}
+
+	public void setLat(long lat) {
+		this.lat = lat;
 	}
 }
