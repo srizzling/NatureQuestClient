@@ -3,10 +3,14 @@ package com.naturequest;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.util.Log;
+
 import com.naturequest.question.Question;
 
 public class Game
 {
+	private MainMenuActivity mainMenuActivity;
+	
 	private int score;
 	private Question question;
 	
@@ -17,6 +21,22 @@ public class Game
 	private String currentQuest;
 	
 	private static Game currentGame;
+	
+	public MainMenuActivity getMainMenuActivity()
+	{
+		return this.mainMenuActivity;
+	}
+
+	public void setMainMenuActivity(MainMenuActivity mainMenuActivity)
+	{
+		this.mainMenuActivity = mainMenuActivity;
+	}
+
+	public void setBackgroundTheme(int theme)
+	{
+	Log.d("Set theme", "tick");
+	this.mainMenuActivity.setBackgroundTheme(theme);
+	}
 	
 	public Game(User user)
 	{
@@ -103,4 +123,6 @@ public class Game
 	{
 		this.currentQuest = currentQuest;
 	}
+	
+	
 }
