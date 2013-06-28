@@ -114,6 +114,7 @@ public class SignupActivity extends Activity
 					customDialog.showTextView(info);
 					customDialog.setPrimaryButton("Ok", null);
 					customDialog.show();
+					finish();
 				}
 
 			}

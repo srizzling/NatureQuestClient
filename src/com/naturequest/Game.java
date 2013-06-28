@@ -17,10 +17,10 @@ import com.naturequest.radar.GPSTracker;
 public class Game
 {
 	private MainMenuActivity mainMenuActivity;
-	
+
 	private int score;
 	private Question question;
-	
+
 	private List<Question> questions = new ArrayList<Question>();
 	private List<JSONObject> quests = new ArrayList<JSONObject>();
 
@@ -29,7 +29,7 @@ public class Game
 	private ArrayList<User> leaders;
 
 	private static Game currentGame;
-	
+
 	public MainMenuActivity getMainMenuActivity()
 	{
 		return this.mainMenuActivity;
@@ -42,10 +42,10 @@ public class Game
 
 	public void setBackgroundTheme(int theme)
 	{
-	Log.d("Set theme", "tick");
-	this.mainMenuActivity.setBackgroundTheme(theme);
+		Log.d("Set theme", "tick");
+		this.mainMenuActivity.setBackgroundTheme(theme);
 	}
-	
+
 	public Game(User user)
 	{
 		this.user = user;
@@ -105,9 +105,18 @@ public class Game
 		for(JSONObject q : questions2){
 			Question questionObj = new Question(q);
 			this.questions.add(questionObj);
+		}	
+
+	}
+
+	public List<String> getQuestionsStr(){
+		List<String> questionStr = new ArrayList<String>();
+		for(Question q:questions){
+			questionStr.add(q.getQuestion());
 		}
-		
-		
+
+
+		return questionStr;
 	}
 
 	public boolean loggedIn() {
@@ -116,7 +125,7 @@ public class Game
 		}
 		return false;
 	}
-	
+
 	public List<String> getQuests()
 	{
 		List<String> temp = new ArrayList<String>();
@@ -150,11 +159,11 @@ public class Game
 		}
 		return null;
 	}
-	
+
 	public void setCurrentQuest(String currentQuest)
 	{
-		
-		
+
+
 		for(JSONObject questObj:quests){
 			try {
 				if(currentQuest.equals(questObj.getString("name"))){
@@ -165,9 +174,9 @@ public class Game
 				e.printStackTrace();
 			}
 		}
-		
+
 	}
-	
+
 	public int getCurrentQuestID(){
 		try {
 			return currentQuest.getInt("id");
@@ -177,7 +186,7 @@ public class Game
 		}
 		return 0;
 	}
-	
+
 	public List<Question> getSortedQuestions(Context context){
 		List<Question> temp = new ArrayList<Question>(this.questions);
 		DistanceComparator compare = new DistanceComparator();
@@ -185,17 +194,17 @@ public class Game
 		Collections.sort(this.questions,compare);
 		return temp;
 	}
-	
+
 	public void setLeaderboard(ArrayList<User> leaders){
 		this.leaders=leaders;
-		
+
 	}
-	
+
 	public List<User> getLeaderboard(){
 		return leaders;
 	}
-	
 
 
-	
+
+
 }

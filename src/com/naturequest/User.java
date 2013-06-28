@@ -61,9 +61,9 @@ public class User
 		return this.score;
 	}
 	
-	public void setScore(int points)
+	public void setScore(int score)
 	{
-		this.score = this.score + points;
+		this.score = score;
 	}
 	
 	public void addUserNotificationListener(UserNotificationListener userNotificationListener) 
@@ -154,13 +154,10 @@ public class User
 	public String getInfo()
 	{
 		return  "Name - " + this.username + "\n" +
-				"Score - " + String.valueOf(this.score) + "\n";
+				"Score - " + this.score + "\n";
 	}
 
 	public void setPicture(String picture) {
-		RequestParams params = new RequestParams();
-		params.put("picture",picture);		
-
 		this.picture = picture;
 	}
 	
