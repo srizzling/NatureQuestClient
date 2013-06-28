@@ -150,6 +150,12 @@ public class User
 		this.token = token;
 		
 	}
+	
+	public String getInfo()
+	{
+		return  "Name - " + this.username + "\n" +
+				"Score - " + String.valueOf(this.score) + "\n";
+	}
 
 	public void setPicture(String picture) {
 		RequestParams params = new RequestParams();

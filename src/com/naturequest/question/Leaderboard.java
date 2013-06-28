@@ -26,7 +26,7 @@ public class Leaderboard {
 			try {
 				userJSON = leaderJSON.getJSONObject(i);
 				temp = new User();
-				temp.setUsername(userJSON.getString("email"));
+				temp.setUsername(userJSON.getString("username"));
 				temp.setScore(userJSON.getInt("score"));
 				temp.setPicture(userJSON.getString("picture"));
 			
