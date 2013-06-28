@@ -17,6 +17,7 @@ package com.naturequest;
 
 import java.util.List;
 
+
 import android.graphics.drawable.Drawable;
 import android.view.MotionEvent;
 import android.view.View;
@@ -177,7 +178,7 @@ public abstract class BalloonItemizedOverlay<Item extends OverlayItem> extends I
 			
 			public boolean onTouch(View v, MotionEvent event) {
 				
-				View l =  ((View) v.getParent()).findViewById(com.naturequest.R.id.balloon_main_layout);
+				View l =  ((View) v.getParent()).findViewById(R.id.balloon_main_layout);
 				Drawable d = l.getBackground();
 				
 				if (event.getAction() == MotionEvent.ACTION_DOWN) {
